@@ -10,3 +10,7 @@ clean:
 	rm -f *.key
 	rm -f *.crt
 	rm -f *.srl
+
+test:
+	curl --cacert ca.crt https://localhost:8080
+	openssl s_client -connect localhost:8080 -CAfile ca.crt

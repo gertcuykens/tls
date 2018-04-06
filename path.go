@@ -6,8 +6,17 @@ import (
 	"path/filepath"
 )
 
-// Path + GOPATH
-func Path(rel string) string {
+var KEY = ""
+var CRT = ""
+var CA = ""
+
+func init() {
+	KEY = path("tls.key")
+	CRT = path("tls.crt")
+	CA = path("ca.crt")
+}
+
+func path(rel string) string {
 	if filepath.IsAbs(rel) {
 		return rel
 	}
