@@ -12,7 +12,7 @@ import (
 var mux *http.ServeMux
 
 func init() {
-	mux := http.NewServeMux()
+	mux = http.NewServeMux()
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "TLS: %+v", r.TLS)
 	})
