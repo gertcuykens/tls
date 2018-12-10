@@ -3,7 +3,7 @@ certificate: clean
 	openssl genrsa -out ca.key 2048
 	openssl req -new -key ca.key -out ca.crt -x509 -nodes -days 3650 -subj "/CN=$(CN)"
 	openssl genrsa -out tls.key 2048
-	openssl req -new -key tls.key -out tls.crt -subj "/CN=$(CN)" -config tls.cnf
+	openssl req -new -key tls.key -out tls.crt -subj "/CN=$(CN)" -config openssl.cnf
 	openssl x509 -req -in tls.crt -out tls.crt -CA ca.crt -CAkey ca.key -CAcreateserial -days 3650 -extensions v3_req -extfile tls.cnf
 
 dhparam:
@@ -11,12 +11,6 @@ dhparam:
 
 test:
 	openssl x509 -in tls.crt -text
-
-apply:
-	-kubectl delete secret tls
-	kubectl create secret tls tls-certificate --key tls.key --cert tls.crt
-	-kubectl delete secret dhparam
-	kubectl create secret dhparam tls-dhparam --from-file=dhparam.pem
 
 clean:
 	rm -f *.key
@@ -28,3 +22,8 @@ clean:
 
 # ssh-keygen -t rsa
 # /O=x:x
+
+# test: CN=localhost
+# test:
+# 	-echo "" | openssl s_client -connect localhost:8080 -CAfile ca.crt -servername $(CN)
+# 	-curl --cacert ca.crt https://localhost:8080
