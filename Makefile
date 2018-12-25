@@ -10,7 +10,7 @@ dhparam:
 	openssl dhparam -out dhparam.pem 4096
 
 test:
-	openssl x509 -in tls.crt -text
+	openssl x509 -in tls.pem -text -noout
 
 clean:
 	rm -f *.key
