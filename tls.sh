@@ -1,14 +1,9 @@
 #!/bin/bash
 case ${1-0} in
 0)
-  # cat <<EOF | cfssl genkey - | cfssljson -bare tls
   cat <<EOF | cfssl gencert -initca - | cfssljson -bare ca
 {
   "CN": "localhost",
-  "hosts": [
-    "localhost",
-    "127.0.0.1"
-  ],
   "key": {
     "algo": "ecdsa",
     "size": 256
@@ -42,3 +37,21 @@ esac
 # go get -u github.com/cloudflare/cfssl/cmd/cfssljson
 # go get -u github.com/cloudflare/cfssl/cmd/cfssl
 # cfssl print-defaults csr
+# cat > ca-csr.json <<EOF
+# cat <<EOF | cfssl genkey - | cfssljson -bare tls
+# openssl x509 -in ca.pem -text -noout
+
+# "hosts": [
+#   "localhost",
+#   "127.0.0.1"
+# ],
+
+# "names": [
+#   {
+#     "O": "etcd",
+#     "OU": "etcd Security",
+#     "L": "San Francisco",
+#     "ST": "California",
+#     "C": "USA"
+#   }
+# ],
