@@ -3,25 +3,18 @@ case ${1-0} in
 0)
   cat <<EOF | cfssl gencert -initca - | cfssljson -bare ca
 {
-  "CN": "localhost",
+  "CN": "root",
   "key": {
     "algo": "ecdsa",
     "size": 256
   }
 }
 EOF
-  echo '{"key":{"algo":"ecdsa","size":256}}' | cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=cfssl.json \
-    -hostname="localhost,127.0.0.1,$SERVER" - | cfssljson -bare tls
+  echo '{"CN": "localhost","key":{"algo":"ecdsa","size":256}}' | cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=cfssl.json \
+    -hostname="localhost,127.0.0.1" - | cfssljson -bare tls
   exit
   ;;
 i)
-  mkdir -p /c/etc/ssl/private
-  mkdir -p /c/etc/ssl/certs
-  cp ca-key.pem /c/etc/ssl/private
-  cp ca.pem /c/etc/ssl/certs
-  cp tls-key.pem /c/etc/ssl/private
-  cp tls.pem /c/etc/ssl/certs
-
   mkdir -p /etc/ssl/private
   mkdir -p /etc/ssl/certs
   cp ca-key.pem /etc/ssl/private
